@@ -291,7 +291,7 @@ public class DOTDomiciliar extends DOTServico {
     public static void main(String[] args) throws Exception {
 
         
-        File[] arquivos = new File[]{new File("sourcefiles/20211128.MET")};
+        File[] arquivos = new File[]{new File("sourcefiles/20211128.MET"),new File("sourcefiles/20211129.MET"),new File("sourcefiles/20211130.MET")};
 
         List<Audiencia> lstAud = new ControllerAudiencia().fornecerListaAudiencia(new DOTDomiciliar().geraCaminhosOrdenadosPorData(arquivos),new int[]{0});
 
@@ -311,32 +311,32 @@ public class DOTDomiciliar extends DOTServico {
         
 
 
-
-        Map<Integer, Integer> mapa = new HashMap<>();
-        Map<Integer, List<Object>> segundoMapa = new HashMap<>();
-
-        lstAud.forEach(audiencia -> {
-
-            audiencia.getLista_afericao_domiciliar().stream().filter(x->x.getCanal().getId()==4).collect(Collectors.toList()).forEach(afericao -> {
-
-                Peso numeroPeso = afericao.getPeso();
-
-                afericao.getSintonia().getSintonias().forEach((minuto, audienciaMinuto) -> {
-
-                    if (audienciaMinuto == 1) {
-                        String numeroDomicilio = afericao.getNumeroDomicilio();
-                        mapa.put(minuto, mapa.getOrDefault(minuto, 0) + 1);
-
-                        segundoMapa.computeIfAbsent(minuto, k -> new ArrayList<>())
-                                .add(numeroDomicilio + "" + numeroPeso);
-
-                    }
-                });
-            });
-        });
-        System.out.println(segundoMapa);
-        System.out.println(mapa);
-
+//
+//        Map<Integer, Integer> mapa = new HashMap<>();
+//        Map<Integer, List<Object>> segundoMapa = new HashMap<>();
+//
+//        lstAud.forEach(audiencia -> {
+//
+//            audiencia.getLista_afericao_domiciliar().stream().filter(x->x.getCanal().getId()==4).collect(Collectors.toList()).forEach(afericao -> {
+//
+//                Peso numeroPeso = afericao.getPeso();
+//
+//                afericao.getSintonia().getSintonias().forEach((minuto, audienciaMinuto) -> {
+//
+//                    if (audienciaMinuto == 1) {
+//                        String numeroDomicilio = afericao.getNumeroDomicilio();
+//                        mapa.put(minuto, mapa.getOrDefault(minuto, 0) + 1);
+//
+//                        segundoMapa.computeIfAbsent(minuto, k -> new ArrayList<>())
+//                                .add(numeroDomicilio + "" + numeroPeso);
+//
+//                    }
+//                });
+//            });
+//        });
+//        System.out.println(segundoMapa);
+//        System.out.println(mapa);
+//
 
 //
 //        lstAud.forEach(x->{
@@ -348,17 +348,17 @@ public class DOTDomiciliar extends DOTServico {
 //        });
 //        
         
+        
+        DOTDomiciliar dot = new DOTDomiciliar(new int[]{100}, 1, 49, lstAud);
+
+
+        Multimap mapa = dot.cronogramaDeImpressao();
 //        
-//        DOTDomiciliar dot = new DOTDomiciliar(new int[]{100}, 0, 1, lstAud);
+        for (Object x : mapa.keySet()) {
 
+            System.out.println(x + ";" + mapa.get(x).toString().replaceAll("\\[|\\]", "").replaceAll(",", ";").replaceAll("\\s", ""));
 
-//        Multimap mapa = dot.cronogramaDeImpressao();
-////        
-//        for (Object x : mapa.keySet()) {
-//
-//            System.out.println(x + ";" + mapa.get(x).toString().replaceAll("\\[|\\]", "").replaceAll(",", ";").replaceAll("\\s", ""));
-//
-//        }
+        }
 
 
 
